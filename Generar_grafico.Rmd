@@ -84,7 +84,24 @@ search()
 
 ```{r}
 library(readr)
-owid_covid_data <- read_csv("owid-covid-data.csv")
+fich <- read_csv('https://covid.ourworldindata.org/data/owid-covid-data.csv')
+```
+# Selección de Países
+
+```{r}
+sel <- fich[fich$location == 'United States' | fich$location == 'Italy' | fich$location == 'France' | fich$location == 'Germany' | fich$location == 'Canada' | fich$location == 'Japan' | fich$location == 'United Kingdom' | fich$location == 'Spain', ]
+```
+
+
+# Gráfica 
+
+```{r}
+library(ggplot2)
+
+grafica <- ggplot(sel, aes(x= date, y = new_deaths_smoothed_per_million, colour = location)) + geom_line() + ggtitle("Muertes diarias por millón debido al Covid-19 en distintos países ") + theme_classic()
+grafica
+
+ggsave("Grafica_paises.pdf")
 ```
 
 
