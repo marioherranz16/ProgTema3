@@ -1,0 +1,47 @@
+---
+title: "Paises"
+author: " Mario Herranz Martínez"
+date: "9/3/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Cargamos las librerias
+```{r}
+library(readr)
+library(plotly)
+library(ggplot2)
+```
+
+## Importamos el fichero
+```{r}
+fich <- read_csv('https://covid.ourworldindata.org/data/owid-covid-data.csv')
+```
+
+## Seleccionamos los paises deseados
+
+```{r}
+sel <- fich[fich$location == 'United States' | fich$location == 'Italy' | fich$location == 'France' | fich$location == 'Germany' | fich$location == 'Canada' | fich$location == 'Japan' | fich$location == 'United Kingdom' | fich$location == 'Spain', ]
+```
+
+## Creamos el grafico
+
+```{r}
+g <- ggplot(sel, aes(x = date, y = new_deaths_smoothed_per_million, colour = location, size = location)) + geom_line()
+g <- g + scale_color_manual(values = c('#974a52', '#bf5a39', '#01823f', '#00847e', '#515e75', 'black', '#d0146a', '#6e3e91'))
+g <- g + scale_size_manual(values = c(0.3,0.3,0.3,0.3,0.3,0.8,0.3,0.3))
+g <- g + theme_classic()
+g <- g + labs(title="", x="", y="")
+g <- g + geom_hline(yintercept = seq(from = -4, to = 20, by = 2), linetype = 3, colour = 'grey')
+g
+
+
+
+ggplotly(g, tooltip = c("x", "y", "group")) %>%
+  config(displayModeBar = FALSE)
+
+```
+
